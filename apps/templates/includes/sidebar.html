@@ -1,0 +1,27 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'assets/css/sidebar.css' %}">
+
+
+<nav class="sidebar" id="appSidebar">
+    <div class="app-sidebar__inner">
+        <div class="cards-container">
+            <div class="card">
+                <a class="nav-link {% if request.resolver_match.url_name == 'turkey.hotel' %}active{% endif %}"
+                   href="{% url 'home:turkey_hotel' %}" style="color: #00FFFFFF">Turkey</a>
+            </div>
+            <div class="card">
+                <a class="nav-link {% if request.resolver_match.url_name == 'egypt.hotel' %}active{% endif %}"
+                   href="{% url 'home:egypt_hotel' %}" style="color: #00FFFFFF">Egypt</a>
+            </div>
+            <div class="card">
+                <a class="nav-link {% if request.resolver_match.url_name == 'odessa.hotel' %}active{% endif %}"
+                   href="{% url 'home:odessa_hotel' %}" style="color: #00FFFFFF">Odessa</a>
+            </div>
+            <div class="card">
+                <a class="nav-link {% if request.resolver_match.url_name == 'thailand.hotel' %}active{% endif %}"
+                   href="{% url 'home:thailand_hotel' %}" style="color: #00FFFFFF">Thailand</a>
+            </div>
+        </div>
+    </div>
+</nav>

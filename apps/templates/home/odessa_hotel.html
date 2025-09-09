@@ -1,0 +1,315 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} About US {% endblock %}
+
+{% block body_class %} about-us {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    {% include 'includes/navigation-transparent.html' %}
+
+    <main class="content-with-sidebar">
+
+    <section class="py-7" style="
+            background-image: url('{{ ASSETS_ROOT }}/img/odessa.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            padding: 50px 0;">
+
+        <span class="mask bg-gradient-dark opacity-6"></span>
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center mx-auto my-auto">
+                </div>
+            </div>
+        </div>
+        </header>
+
+        <div class="container" style="padding: 5%">
+
+                <!-- Deluxe Room -->
+                <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6 mb-5">
+                    <div class="row align-items-center">
+
+                        <!-- Left column: carousel -->
+                        <div class="col-lg-6">
+                            <div id="hotelCarousel1" class="carousel slide hotel-carousel-section"
+                                 data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    <div class="carousel-item active">
+                                        <img src="https://q-xx.bstatic.com/xdata/images/hotel/max1024x768/561390091.jpg?k=dbaa92534ba8387252c11ad296277df27147ce99bcca450ca7ffcee5c1bde1a2&o=&s=1024x"
+                                             class="d-block w-100" alt="Room 1">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="https://q-xx.bstatic.com/xdata/images/hotel/max1024x768/512604705.jpg?k=83681adb803e0726ea9fd708fd6f762a914317c89594cfe84345ea4d8294695b&o=&s=1024x"
+                                             class="d-block w-100" alt="Room 2">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="https://q-xx.bstatic.com/xdata/images/hotel/max1024x768/561390076.jpg?k=814aed76e7d71ab8731941d816bbf45ce8c40dd81ca99c3e240393004479871f&o=&s=1024x"
+                                             class="d-block w-100" alt="Room 3">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="https://q-xx.bstatic.com/xdata/images/hotel/max1024x768/512370854.jpg?k=6ed574278037e536297215e3a179a217b4cbcc08a5eec8249baef63c92955999&o=&s=1024x"
+                                             class="d-block w-100" alt="Room 4">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="https://q-xx.bstatic.com/xdata/images/hotel/max1024x768/512370926.jpg?k=a30b1eec6bd505eb0b346410938510994ac8d0859ec299da4a18426984b7049d&o=&s=1024x"
+                                             class="d-block w-100" alt="Room 5">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="https://q-xx.bstatic.com/xdata/images/hotel/max1024x768/512370792.jpg?k=94341d57c11b5facfa0bc7998cffa0d5d4f99a6d5bb339a7158c10099c39c887&o=&s=1024x"
+                                             class="d-block w-100" alt="Bath 1">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="https://q-xx.bstatic.com/xdata/images/hotel/max1024x768/560473581.jpg?k=56ec37a2caa6c928064d3cb00c9a46d84545ce3055d9f026c7019d3fc8f9c6f2&o=&s=1024x"
+                                             class="d-block w-100" alt="Bath 2">
+                                    </div>
+                                </div>
+                                <!-- Buttons -->
+                                <button class="carousel-control-prev" type="button" data-bs-target="#hotelCarousel1"
+                                        data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon"></span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#hotelCarousel1"
+                                        data-bs-slide="next">
+                                    <span class="carousel-control-next-icon"></span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Right column: card -->
+                        <div class="col-lg-4 ms-auto mt-lg-0 mt-4">
+                            <div class="card shadow-sm border-0 text-center p-3" style="border-radius: 12px;">
+                                <div class="card-body">
+                                    <h5 class="card-title fw-bold text-dark">Deluxe Room</h5>
+                                    <p class="card-text text-secondary">
+                                        One double bed and 2 sofas, sea view.
+                                    </p>
+                                    <p class="fw-bold text-dark fs-5 mb-3">
+                                        from <span class="text-success fw-bold">$120</span> / night
+                                    </p>
+                                    <a href="{% url 'home:booking_create' %}" class="btn btn-primary">Booking</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Family Room -->
+                <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6 mb-5">
+                    <div class="row align-items-center">
+
+                        <!-- Left column: carousel -->
+                        <div class="col-lg-6">
+                            <div id="hotelCarousel2" class="carousel slide hotel-carousel-section"
+                                 data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    <div class="carousel-item active">
+                                        <img src="https://q-xx.bstatic.com/xdata/images/hotel/max1024x768/505779031.jpg?k=b687614a82c2c55f046f325b5f91338e482ab2d4f39800cd92dd770decdf2ac1&o=&s=1024x"
+                                             class="d-block w-100" alt="Room 1">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="https://q-xx.bstatic.com/xdata/images/hotel/max1024x768/505767302.jpg?k=58b710535bcdb0c61db9fc905d60a5f1a8f5f1f07e04ebea7cba52c984727a63&o=&s=1024x"
+                                             class="d-block w-100" alt="Room 2">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="https://q-xx.bstatic.com/xdata/images/hotel/max1024x768/562049477.jpg?k=b3f590616b0ade190a4c725c5fd69dcc428d6b0ecb5209941f9dc82475f8f24e&o=&s=1024x"
+                                             class="d-block w-100" alt="Room 3">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="https://q-xx.bstatic.com/xdata/images/hotel/max1024x768/505767674.jpg?k=5743a2315c6c8a55ede5d811406d68f2270127cb4731abb33ed01391c122fe8c&o=&s=1024x"
+                                             class="d-block w-100" alt="Bath 1">
+                                    </div>
+                                </div>
+                                <!-- Buttons -->
+                                <button class="carousel-control-prev" type="button" data-bs-target="#hotelCarousel2"
+                                        data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon"></span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#hotelCarousel2"
+                                        data-bs-slide="next">
+                                    <span class="carousel-control-next-icon"></span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Right column: card -->
+                        <div class="col-lg-4 ms-auto mt-lg-0 mt-4">
+                            <div class="card shadow-sm border-0 text-center p-3" style="border-radius: 12px;">
+                                <div class="card-body">
+                                    <h5 class="card-title fw-bold text-dark">Family Room</h5>
+                                    <p class="card-text text-secondary">
+                                        One double and 2 single beds.
+                                    </p>
+                                    <p class="fw-bold text-dark fs-5 mb-3">
+                                        from <span class="text-success fw-bold">$110</span> / night
+                                    </p>
+                                    <a href="{% url 'home:booking_create' %}" class="btn btn-primary">Booking</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Standard Room -->
+                <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6">
+                    <div class="row align-items-center">
+
+                        <!-- Left column: carousel -->
+                        <div class="col-lg-6">
+                            <div id="hotelCarousel3" class="carousel slide hotel-carousel-section"
+                                 data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    <div class="carousel-item active">
+                                        <img src="https://q-xx.bstatic.com/xdata/images/hotel/max1024x768/293861850.jpg?k=967a1bb2ae950d4dd441073eda283b888e057821c51128020ea446effe9e196b&o=&s=1024x"
+                                             class="d-block w-100" alt="Room 1">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="https://q-xx.bstatic.com/xdata/images/hotel/max1024x768/506257501.jpg?k=f226308a3205843d320706277e06d25911e9993d4825577e9ab7953c48093f82&o=&s=1024x"
+                                             class="d-block w-100" alt="Room 2">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="https://q-xx.bstatic.com/xdata/images/hotel/max1024x768/506262110.jpg?k=f1878d89595f8464cd5407e8f14ce9ad4ac05d430a43359426f85189774f86b4&o=&s=1024x"
+                                             class="d-block w-100" alt="Bath 1">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="https://q-xx.bstatic.com/xdata/images/hotel/max1024x768/506258948.jpg?k=3f4b25a3fd042cc3ec2d96eda0e61caa804212f418640df8e21107386813227e&o=&s=1024x"
+                                             class="d-block w-100" alt="Bath 1">
+                                    </div>
+                                </div>
+                                <!-- Buttons -->
+                                <button class="carousel-control-prev" type="button" data-bs-target="#hotelCarousel3"
+                                        data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon"></span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#hotelCarousel3"
+                                        data-bs-slide="next">
+                                    <span class="carousel-control-next-icon"></span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Right column: card -->
+                        <div class="col-lg-4 ms-auto mt-lg-0 mt-4">
+                            <div class="card shadow-sm border-0 text-center p-3" style="border-radius: 12px;">
+                                <div class="card-body">
+                                    <h5 class="card-title fw-bold text-dark">Standard Room</h5>
+                                    <p class="card-text text-secondary">
+                                        One double and 2 single beds.
+                                    </p>
+                                    <p class="fw-bold text-dark fs-5 mb-3">
+                                        from <span class="text-success fw-bold">$95</span> / night
+                                    </p>
+                                    <a href="{% url 'home:booking_create' %}" class="btn btn-primary">Booking</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+    <script>
+        // get the element to animate
+        var element = document.getElementById('count-stats');
+        var elementHeight = element.clientHeight;
+
+        // listen for scroll event and call animate function
+
+        document.addEventListener('scroll', animate);
+
+        // check if element is in view
+        function inView() {
+            // get window height
+            var windowHeight = window.innerHeight;
+            // get number of pixels that the document is scrolled
+            var scrollY = window.scrollY || window.pageYOffset;
+            // get current scroll position (distance from the top of the page to the bottom of the current viewport)
+            var scrollPosition = scrollY + windowHeight;
+            // get element position (distance from the top of the page to the bottom of the element)
+            var elementPosition = element.getBoundingClientRect().top + scrollY + elementHeight;
+
+            // is scroll position greater than element position? (is element in view?)
+            if (scrollPosition > elementPosition) {
+                return true;
+            }
+
+            return false;
+        }
+
+        var animateComplete = true;
+
+        // animate element when it is in view
+        function animate() {
+
+            // is element in view?
+            if (inView()) {
+                if (animateComplete) {
+                    if (document.getElementById('state1')) {
+                        const countUp = new CountUp('state1', document.getElementById("state1").getAttribute("countTo"));
+                        if (!countUp.error) {
+                            countUp.start();
+                        } else {
+                            console.error(countUp.error);
+                        }
+                    }
+                    if (document.getElementById('state2')) {
+                        const countUp1 = new CountUp('state2', document.getElementById("state2").getAttribute("countTo"));
+                        if (!countUp1.error) {
+                            countUp1.start();
+                        } else {
+                            console.error(countUp1.error);
+                        }
+                    }
+                    if (document.getElementById('state3')) {
+                        const countUp2 = new CountUp('state3', document.getElementById("state3").getAttribute("countTo"));
+                        if (!countUp2.error) {
+                            countUp2.start();
+                        } else {
+                            console.error(countUp2.error);
+                        }
+                        ;
+                    }
+                    animateComplete = false;
+                }
+            }
+        }
+
+        if (document.getElementById('typed')) {
+            var typed = new Typed("#typed", {
+                stringsElement: '#typed-strings',
+                typeSpeed: 90,
+                backSpeed: 90,
+                backDelay: 200,
+                startDelay: 500,
+                loop: true
+            });
+        }
+    </script>
+
+    <script>
+        if (document.getElementsByClassName('page-header')) {
+            window.onscroll = debounce(function () {
+                var scrollPosition = window.pageYOffset;
+                var bgParallax = document.querySelector('.page-header');
+                var oVal = (window.scrollY / 3);
+                bgParallax.style.transform = 'translate3d(0,' + oVal + 'px,0)';
+            }, 6);
+        }
+    </script>
+    </main>
+
+{% endblock javascripts %}
