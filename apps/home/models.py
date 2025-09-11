@@ -1,8 +1,7 @@
-from typing import Any
-
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class RoomType(models.Model):
@@ -43,10 +42,6 @@ class Booking(models.Model):
         message="Phone number must be entered in digits only (8-15 digits)."
     )
     phone = models.CharField(validators=[phone_regex], max_length=15)
-
-    def __init__(self, *args: Any, **kwargs: Any):
-        super().__init__(args, kwargs)
-        self.id = None
 
     def clean(self):
         if self.start_date and self.end_date:
