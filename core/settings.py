@@ -1,5 +1,7 @@
 import os, environ
 
+from django.conf import settings
+
 env = environ.Env(
     # set casting, default value
     DEBUG=(bool, True)

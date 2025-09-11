@@ -1,6 +1,6 @@
 import datetime
 from apps.home.forms import BookingForm
-from apps.home.models import Room, RoomType, Booking
+from apps.home.models import Room, RoomType
 from django.test import TestCase
 
 
