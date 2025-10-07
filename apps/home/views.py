@@ -1,17 +1,18 @@
+from datetime import timezone
+
 from django import template
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template import loader, TemplateDoesNotExist
 from django.urls import reverse, reverse_lazy
-from django.views.generic import CreateView, DetailView
+from django.views.generic import CreateView, DetailView, ListView
 from django import forms
 from django.views.generic import TemplateView
 
 
 from apps.home.forms import BookingForm
-from apps.home.models import Booking, Room
-
+from apps.home.models import Booking, Room, Hotel, RoomType
 
 
 class IndexView(TemplateView):
@@ -66,13 +67,62 @@ class BookingCreateView(CreateView):
 class BookingConfirmationView(DetailView):
     model = Booking
     template_name = "home/confirmation.html"
+    context_object_name = "hotels"
 
 
-class HotelsPageView(TemplateView):
-    def get_template_names(self):
-        hotel = self.kwargs.get('hotel')
-        return [f"home/{hotel}_hotel.html"]
+class HotelListView(ListView):
+    model = Hotel
+    template_name = 'home/hotel_page.html'
 
 
 class AboutUsView(TemplateView):
     template_name = "home/about-us.html"
+
+
+class BookingListView(ListView):
+    model = Booking
+    template_name = "hotels/booking_list.html"
+    context_object_name = "bookings"
+
+    def get_queryset(self):
+        return Booking.objects.filter(user=self.request.user)
+
+
+class UserBookingView(ListView):
+    model = Booking
+    template_name = "hotels/bookings.html"
+    context_object_name = "bookings"
+
+    def get_queryset(self):
+        user = self.request.user
+        today = timezone.now().date()
+
+        queryset = Booking.objects.filter(user=user)
+
+        filter_type = self.request.GET.get("filter")
+        if filter_type == "past":
+            queryset = queryset.filter(check_out__lt=today, status="accepted")
+        elif filter_type == "future":
+            queryset = queryset.filter(check_in__gte=today, status="accepted")
+        elif filter_type == "cancelled":
+            queryset = queryset.filter(status="cancelled")
+
+        return queryset.order_by("-check_in")
+
+
+class RoomTypeListView(ListView):
+    model = RoomType
+    template_name = "hotels/room_type_list.html"
+    context_object_name = "room_types"
+
+
+class RoomListView(ListView):
+    model = Room
+    template_name = "hotels/room_list.html"
+    context_object_name = "rooms"
+
+
+class RoomDetailView(DetailView):
+    model = Room
+    template_name = "hotels/room_detail.html"
+    context_object_name = "room"

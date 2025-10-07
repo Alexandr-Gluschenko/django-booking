@@ -1,0 +1,28 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}My Bookings{% endblock %}
+
+{% block content %}
+<h2>My Bookings</h2>
+
+{% if bookings %}
+<ul>
+    {% for booking in bookings %}
+    <li>
+        <strong>Hotel:</strong> {{ booking.room.name }} ({{ booking.room_type.name }})<br>
+        <strong>Check-in:</strong> {{ booking.check_in|date:"Y-m-d" }}<br>
+        <strong>Check-out:</strong> {{ booking.check_out|date:"Y-m-d" }}<br>
+        <strong>Guests:</strong> {{ booking.guests }}<br>
+        <strong>Total Price:</strong> {{ booking.total_price }}<br>
+        <strong>Status:</strong> {{ booking.get_status_display }}<br>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>You don’t have any bookings yet.</p>
+{% endif %}
+
+<a href="booking_create.html" class="btn btn-primary btn-lg">
+    Create a new booking
+</a>
+{% endblock %}

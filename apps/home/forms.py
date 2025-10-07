@@ -1,18 +1,19 @@
+from datetime import timezone
+
 from django import forms
 from django.core.validators import RegexValidator
-
+from django.core.exceptions import ValidationError
 from apps.home.models import Booking
 
 
 class BookingForm(forms.ModelForm):
     class Meta:
         model = Booking
-        fields = ('name', 'guest_count', 'room', 'rooms_count', 'start_date', 'end_date', 'phone')
+        fields = ('user', 'guests', 'room', 'check_in', 'check_out', 'phone')
         widgets = {
-            'check_in': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
-            'check_out': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
-            'guest_count': forms.NumberInput(attrs={'class': 'form-control', 'min': 1}),
-            'rooms_count': forms.NumberInput(attrs={'class': 'form-control', 'min': 1}),
+            'check_in': forms.DateField(),
+            'check_out': forms.DateField(),
+            'guests': forms.NumberInput(attrs={'class': 'form-control', 'min': 1}),
             'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your phone number'}),
         }
 
@@ -30,3 +31,16 @@ class BookingForm(forms.ModelForm):
             'class': 'form-control'
         })
     )
+    def clean(self):
+        check_in = self.cleaned_data.get('check_in')
+        check_out = self.cleaned_data.get('check_out')
+        room = self.cleaned_data.get('room')
+
+        if check_in >= check_out:
+            raise ValidationError("The check-out date must be later than the check-in date.")
+
+        if check_in < timezone.now():
+            raise ValidationError("The check-in date must be later than the current date.")
+
+        if not room.is_available(check_in, check_out):
+            raise ValidationError("The room must be available.")

@@ -1,9 +1,26 @@
+import re
+from django.utils import timezone
+
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import Q
 
-# Create your models here.
+
+class Hotel(models.Model):
+    name = models.CharField(max_length=100)
+    country = models.CharField(max_length=100)
+    city = models.CharField(max_length=100)
+    address = models.TextField(max_length=255)
+    description = models.TextField(blank=True)
+    stars = models.IntegerField(default=3)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.name} ({self.city})'
+
+
 class RoomType(models.Model):
     name = models.CharField(max_length=100)
 
@@ -11,66 +28,124 @@ class RoomType(models.Model):
         return self.name
 
 
-class Room(models.Model):
-    name = models.CharField(max_length=100, null=True, blank=True)
-    number = models.IntegerField()
-    room_type = models.ForeignKey('RoomType', on_delete=models.CASCADE, related_name='rooms')
-    price_per_night = models.DecimalField(max_digits=10, decimal_places=2)
-
-    def __str__(self):
-        return f"{self.name} - Room {self.number} - {self.room_type.name}"
-
-
-class Guest(models.Model):
+class Amenity(models.Model):
     name = models.CharField(max_length=100)
-    email = models.EmailField()
 
     def __str__(self):
         return self.name
 
-class Booking(models.Model):
+class Room(models.Model):
+    STATUS_CHOICES = [
+        ("available", "Available"),
+        ("occupied", "Occupied"),
+        ("repair", "Repair"),
+    ]
     name = models.CharField(max_length=100)
-    room = models.ForeignKey('Room', on_delete=models.CASCADE, related_name='bookings', default=1)
-    start_date = models.DateField()
-    end_date = models.DateField()
-    price_per_night = models.DecimalField(max_digits=10, decimal_places=2, editable=False)
-    guest_count = models.PositiveIntegerField(default=1)
-    rooms_count = models.PositiveIntegerField(default=1)
+    number = models.IntegerField()
+    room_type = models.ForeignKey('RoomType', on_delete=models.CASCADE, related_name='rooms')
+    price_per_night = models.DecimalField(max_digits=10, decimal_places=2)
+    max_guests = models.PositiveIntegerField(default=1)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="available")
+    amenities = models.ManyToManyField(Amenity, related_name='rooms')
 
-    phone_regex = RegexValidator(
-        regex=r'^\+?1?\d{8,15}$',
-        message="Phone number must be entered in digits only (8-15 digits)."
-    )
-    phone = models.CharField(validators=[phone_regex], max_length=15)
+    def is_available(self, check_in, check_out):
+        overlapping_bookings = self.bookings.filter(
+            Q(check_in__lt=check_out) & Q(check_out__gt=check_in),
+            status='accepted'
+        )
+        return not overlapping_bookings.exists()
+
+    def __str__(self):
+        return f'{self.name} - Room {self.number} - {self.room_type.name}'
+
+
+class Booking(models.Model):
+    STATUS_CHOICES = [
+        ("accepted", "Accepted"),
+        ("cancelled", "Cancelled"),
+        ("pending", "Pending"),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bookings')
+    room = models.ForeignKey('Room', on_delete=models.CASCADE, related_name='bookings')
+
+    check_in = models.DateTimeField(default=timezone.now)
+    check_out = models.DateTimeField(default=timezone.now)
+    phone = models.CharField(max_length=20,
+                             validators=[RegexValidator(regex=r'^\+380\d{9}$',
+                                                        message="The phone number must be in the format: '+380XXXXXXXXX' (for example, +380981234567)"
+                                                        )
+                                         ]
+                             )
+    guests = models.PositiveIntegerField(default=1)
+
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=20,
+                              choices=[
+                                  ('pending', 'Pending'),
+                                  ('accepted', 'Accepted'),
+                                  ('cancelled', 'Cancelled'),
+                                  ('repair', 'Repair'),
+                              ],
+                              default='pending')
+
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def clean(self):
-        if self.start_date and self.end_date:
-            if self.start_date >= self.end_date:
-                raise ValidationError("The start date cannot be later than the end date.")
+        errors = {}
+        # Check room availability
+        if not self.room.is_available(self.check_in, self.check_out):
+            errors["room"] = "The room is not available on the selected dates."
 
-            # Check for booking overlap only if dates are specified
+        # Checking the number of guests
+        if self.guests > self.room.max_guests:
+            errors["guests"] = f"Maximum guests for this room: {self.room.max_guests}."
 
-            overlapping_bookings = Booking.objects.filter(
-                rooms_count=self.rooms_count,
-                start_date__lt=self.end_date,
-                end_date__gt=self.start_date,
-            )
-            if self.pk:
-                overlapping_bookings = overlapping_bookings.exclude(pk=self.pk)
+        # Phone number authentication
+        if not re.match(r'^\+380\d{9}$', self.phone):
+            errors["phone"] = "Phone number must be entered in the format: '+380985453232'"
 
-            if overlapping_bookings.exists():
-                raise ValidationError("The room is already booked for these dates.")
+        # Check if a room is available for booking based on its status.
+        if self.room.status in ["repair", "occupied"]:
+            msg = "The room is under renovation." if self.room.status == "repair" else "The room is occupied."
+            errors["status"] = msg
+
+        if errors:
+            raise ValidationError(errors)
+
+    def accept(self):
+        self.status = 'accepted'
+        self.save()
+
+    def cancel(self):
+        self.status = 'cancelled'
+        self.save()
+
+        if self.status == "cancelled":
+            raise ValidationError("Booking is already cancelled")
+
 
     def save(self, *args, **kwargs):
+        nights = (self.check_out - self.check_in).days
+        if nights < 1:
+            nights = 1
 
-        if self.room:
-            self.price_per_night = self.room.price_per_night
+        # base price
+        base_price = self.room.price_per_night * nights * self.guests
+
+        #Discount logic
+        if nights >= 7:
+            base_price *= 0.9
+        if self.guests >= 4:
+            base_price *= 0.95
+
+        # save the final price
+        self.total_price = base_price
+
+        # Validation (e.g. checking room availability)
+        self.clean()
 
         super().save(*args, **kwargs)
 
-    def total_price(self):
-        nights = (self.end_date - self.start_date).days
-        return nights * self.price_per_night
-
     def __str__(self):
-        return f"Booking {self.id} - {self.start_date} to {self.end_date} - {self.price_per_night}"
+        return f"{self.user} - {self.room} ({self.check_in} -> {self.check_out})"

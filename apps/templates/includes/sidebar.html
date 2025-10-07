@@ -2,26 +2,17 @@
 
 <link rel="stylesheet" href="{% static 'assets/css/sidebar.css' %}">
 
-
 <nav class="sidebar" id="appSidebar">
     <div class="app-sidebar__inner">
         <div class="cards-container">
+            {% for hotel in hotels %}
             <div class="card">
-                <a class="nav-link {% if request.resolver_match.kwargs.hotel == 'turkey' %}active{% endif %}"
-                   href="{% url 'hotel_page' hotel='turkey' %}" style="color: #00FFFFFF">Turkey</a>
+                <a class="nav-link {% if request.resolver_match.kwargs.hotel_id == hotel.id %}active{% endif %}"
+                   href="{% url 'hotel_list' hotel.id %}" style="color: #00FFFFFF">
+                   {{ hotel.country }}
+                </a>
             </div>
-            <div class="card">
-                <a class="nav-link {% if request.resolver_match.url_name == 'egypt.hotel' %}active{% endif %}"
-                   href="{% url 'hotel_page' hotel='egypt' %}" style="color: #00FFFFFF">Egypt</a>
-            </div>
-            <div class="card">
-                <a class="nav-link {% if request.resolver_match.url_name == 'odessa.hotel' %}active{% endif %}"
-                   href="{% url 'hotel_page' hotel='odessa' %}" style="color: #00FFFFFF">Odessa</a>
-            </div>
-            <div class="card">
-                <a class="nav-link {% if request.resolver_match.url_name == 'thailand.hotel' %}active{% endif %}"
-                   href="{% url 'hotel_page' hotel='thailand' %}" style="color: #00FFFFFF">Thailand</a>
-            </div>
+            {% endfor %}
         </div>
     </div>
 </nav>
