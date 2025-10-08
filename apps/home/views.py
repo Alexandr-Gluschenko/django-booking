@@ -81,7 +81,7 @@ class AboutUsView(TemplateView):
 
 class BookingListView(ListView):
     model = Booking
-    template_name = "hotels/booking_list.html"
+    template_name = "home/booking_list.html"
     context_object_name = "bookings"
 
     def get_queryset(self):
@@ -90,7 +90,7 @@ class BookingListView(ListView):
 
 class UserBookingView(ListView):
     model = Booking
-    template_name = "hotels/bookings.html"
+    template_name = "home/bookings.html"
     context_object_name = "bookings"
 
     def get_queryset(self):
@@ -112,17 +112,17 @@ class UserBookingView(ListView):
 
 class RoomTypeListView(ListView):
     model = RoomType
-    template_name = "hotels/room_type_list.html"
+    template_name = "home/room_type_list.html"
     context_object_name = "room_types"
 
 
 class RoomListView(ListView):
     model = Room
-    template_name = "hotels/room_list.html"
+    template_name = "home/room_list.html"
     context_object_name = "rooms"
 
 
 class RoomDetailView(DetailView):
     model = Room
-    template_name = "hotels/room_detail.html"
+    template_name = "home/room_detail.html"
     context_object_name = "room"
