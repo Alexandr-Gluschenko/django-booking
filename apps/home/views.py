@@ -1,18 +1,20 @@
-from datetime import timezone
+from datetime import timezone, datetime
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django import template
+from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
-from django.template import loader, TemplateDoesNotExist
+from django.template import loader
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DetailView, ListView
 from django import forms
 from django.views.generic import TemplateView
-
+from django.contrib import messages
 
 from apps.home.forms import BookingForm
-from apps.home.models import Booking, Room, Hotel, RoomType
+from apps.home.models import Booking, Room, Hotel
 
 
 class IndexView(TemplateView):
@@ -24,23 +26,11 @@ class IndexView(TemplateView):
         return context
 
 
-class PagesView(TemplateView):
-    def get_template_names(self):
-        load_template = self.request.path.split('/')[-1]
-
-        if load_template == "admin":
-            return HttpResponseRedirect(reverse('admin:index'))
-
-        try:
-            return [f"home/{load_template}"]
-        except TemplateDoesNotExist:
-            return [f"home/page-404.html"]
-
-
 class BookingCreateView(CreateView):
     model = Booking
     form_class = BookingForm
     template_name = "home/booking_create.html"
+    login_url = '/login/'
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
@@ -56,6 +46,7 @@ class BookingCreateView(CreateView):
         return form
 
     def form_valid(self, form):
+        form.instance.user = self.request.user
         form.instance.price_per_night = form.instance.room.price_per_night
         response = super().form_valid(form)
         return response
@@ -67,54 +58,52 @@ class BookingCreateView(CreateView):
 class BookingConfirmationView(DetailView):
     model = Booking
     template_name = "home/confirmation.html"
-    context_object_name = "hotels"
+    context_object_name = "booking"
+    pk_url_kwarg = "booking_id"
 
 
 class HotelListView(ListView):
     model = Hotel
     template_name = 'home/hotel_page.html'
 
+    def get_queryset(self):
+        queryset = super().get_queryset().distinct()
+
+        name = self.request.GET.get("name")
+        min_price = self.request.GET.get("min_price")
+        max_price = self.request.GET.get("max_price")
+
+        if name:
+            queryset = queryset.filter(name__icontains=name)
+
+        if min_price:
+            try:
+                min_price = float(min_price)
+                queryset = queryset.filter(rooms__price_per_night__gte=min_price)
+            except ValueError:
+                pass
+
+        if max_price:
+            try:
+                max_price = float(max_price)
+                queryset = queryset.filter(rooms__price_per_night__lte=max_price)
+            except ValueError:
+                pass
+
+        return queryset.distinct()
+
 
 class AboutUsView(TemplateView):
     template_name = "home/about-us.html"
 
 
-class BookingListView(ListView):
+class BookingListView(LoginRequiredMixin, ListView):
     model = Booking
-    template_name = "home/booking_list.html"
-    context_object_name = "bookings"
+    template_name = 'bookings_list.html'
+    context_object_name = 'bookings'
 
     def get_queryset(self):
         return Booking.objects.filter(user=self.request.user)
-
-
-class UserBookingView(ListView):
-    model = Booking
-    template_name = "home/bookings.html"
-    context_object_name = "bookings"
-
-    def get_queryset(self):
-        user = self.request.user
-        today = timezone.now().date()
-
-        queryset = Booking.objects.filter(user=user)
-
-        filter_type = self.request.GET.get("filter")
-        if filter_type == "past":
-            queryset = queryset.filter(check_out__lt=today, status="accepted")
-        elif filter_type == "future":
-            queryset = queryset.filter(check_in__gte=today, status="accepted")
-        elif filter_type == "cancelled":
-            queryset = queryset.filter(status="cancelled")
-
-        return queryset.order_by("-check_in")
-
-
-class RoomTypeListView(ListView):
-    model = RoomType
-    template_name = "home/room_type_list.html"
-    context_object_name = "room_types"
-
 
 class RoomListView(ListView):
     model = Room
@@ -126,3 +115,44 @@ class RoomDetailView(DetailView):
     model = Room
     template_name = "home/room_detail.html"
     context_object_name = "room"
+
+
+@method_decorator(login_required, name="dispatch")
+class MyBookingsView(ListView):
+    model = Booking
+    template_name = "home/my_bookings.html"
+    context_object_name = "bookings"
+
+    def get_queryset(self):
+        return Booking.objects.filter(user=self.request.user).order_by("-id")
+
+@login_required
+def cancel_booking(request, pk):
+    booking = get_object_or_404(Booking, pk=pk, user=request.user)
+    booking.status = "cancelled"
+    booking.save()
+    messages.success(request, "Your booking has been cancelled.")
+    return redirect("home:my_bookings")
+
+@login_required
+def edit_booking(request, pk):
+    booking = get_object_or_404(Booking, pk=pk, user=request.user)
+
+    if request.method == "POST":
+        check_in_str = request.POST.get("check_in")
+        check_out_str = request.POST.get("check_out")
+
+        new_check_in = datetime.strptime(check_in_str, "%Y-%m-%d").date()
+        new_check_out = datetime.strptime(check_out_str, "%Y-%m-%d").date()
+
+        if not booking.room.is_available(new_check_in, new_check_out, exclude_booking_id=booking.pk):
+            messages.error(request, "The room is not available for these dates.")
+            return render(request, "home/edit_booking.html", {"booking": booking})
+
+        booking.check_in = new_check_in
+        booking.check_out = new_check_out
+        booking.save()
+        messages.success(request, "Booking updated successfully.")
+        return redirect("home:my_bookings")
+
+    return render(request, "home/edit_booking.html", {"booking": booking})

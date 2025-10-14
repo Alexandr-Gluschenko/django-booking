@@ -2,8 +2,6 @@
 {% load static %}
 {% load crispy_forms_filters %}
 
-{% block title %}Book Your Room{% endblock %}
-
 {% block body_class %} booking-page {% endblock %}
 
 <!-- Specific Page CSS goes HERE -->
@@ -17,7 +15,7 @@
         }
 
         .fullscreen-bg {
-            background-image: url('{% static 'assets/img/island.jpg' %}');
+            background-image: url('{% static 'assets/img/milano.jpg' %}');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -32,13 +30,6 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.6);
-        }
-
-        .booking-form-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         .button-back {
@@ -57,18 +48,14 @@
 
         .card {
             background: rgba(43, 36, 36, 0.2);
+            color: white;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 12px rgb(0, 255, 255);
             font-size: 20px;
             font-weight: bold;
             cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             text-align: center;
-        }
-
-        .card:hover {
-            transform: scale(1.5);
-            box-shadow: 0 6px 18px rgb(0, 255, 187);
         }
     </style>
 {% endblock stylesheets %}
@@ -85,7 +72,7 @@
             <!-- Header Title -->
             <div class="row justify-content-center pt-5">
                 <div class="col-lg-8 text-center">
-                    <h1 class="text-white mb-5">Book Your Room</h1>
+                    <h1 class="text-white mb-5">Edit Booking</h1>
                 </div>
             </div>
 
@@ -102,25 +89,25 @@
                 </div>
             </div>
 
-
-            <!-- Booking Form -->
-            <div class="row justify-content-center align-items-center">
-                <div class="col-md-8 col-lg-6">
-                    <div class="booking-form-card p-5">
-                        <h2 class="mb-4 text-center">Book your room online</h2>
-                        <form method="post">
-                            {% csrf_token %}
-                            {{ form|crispy }}
-                            <div class="text-center mt-4">
-                                <button type="submit" class="btn btn-primary btn-lg">Submit Booking</button>
-                            </div>
-                        </form>
+            <div class="container mt-5">
+                <h3>Edit Booking</h3>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <div class="mb-3">
+                        <label>Check-in date:</label>
+                        <input type="date" name="check_in" value="{{ booking.check_in|date:'Y-m-d' }}" class="form-control" required>
                     </div>
-                </div>
+                    <div class="mb-3">
+                        <label>Check-out date:</label>
+                        <input type="date" name="check_out" value="{{ booking.check_out|date:'Y-m-d' }}" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    <a href="{% url 'home:my_bookings' %}" class="btn btn-secondary">Back</a>
+                </form>
             </div>
         </div>
     </div>
-
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE -->

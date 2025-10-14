@@ -9,9 +9,9 @@
 
 {% block content %}
 
-    {% include 'includes/navigation-transparent.html' %}
+{% include 'includes/navigation-transparent.html' %}
 
-    <main class="content-with-sidebar">
+<main class="content-with-sidebar">
 
     <section class="py-7" style="
             background-image: url('{{ ASSETS_ROOT }}/img/egypt.jpg');
@@ -21,6 +21,45 @@
             padding: 50px 0;">
 
         <span class="mask bg-gradient-dark opacity-6"></span>
+
+        <div class="container" style="padding: 50px 0;">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center mx-auto my-auto">
+                </div>
+            </div>
+
+            <!-- card -->
+            <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6 mb-5">
+                <div class="row align-items-center"></div>
+                <form method="GET" action="{% url 'home:hotel_page' %}" class="w-100">
+                    <div class="row g-3">
+
+                        <!-- Hotel name -->
+                        <div class=" col-md-4">
+                            <input type="text" name="name" class="form-control" placeholder="Search by hotel name"
+                            value="{{ request.GET.name }}">
+                        </div>
+
+                        <!-- Min price -->
+                        <div class="col-md-3">
+                            <input type="number" name="min_price" class="form-control" placeholder="Min price"
+                            value="{{ request.GET.min_price }}">
+                        </div>
+
+                        <!-- Max price -->
+                        <div class="col-md-3">
+                            <input type="number" name="max_price" class="form-control" placeholder="Max price"
+                            value="{{ request.GET.max_price }}">
+                        </div>
+
+                        <!-- Search button -->
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-danger w-100">Filter</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
 
         <div class="container">
             <div class="row justify-content-center">
@@ -32,172 +71,366 @@
 
         <div class="container" style="padding: 5%">
 
-                <!-- Deluxe Room -->
-                <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6 mb-5">
-                    <div class="row align-items-center">
+            <!-- Turkey Rooms -->
+            <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6 mb-5">
+                <div class="row align-items-center">
 
-                        <!-- Left column: carousel -->
-                        <div class="col-lg-6">
-                            <div id="hotelCarousel1" class="carousel slide hotel-carousel-section"
-                                 data-bs-ride="carousel">
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <img src="https://q-xx.bstatic.com/xdata/images/hotel/max1024x768/318841662.jpg?k=7936689244f49daa6c679cb73506fc539b72b398d8edcf13980e40d6fe064a2e&o=&s=1024x"
-                                             class="d-block w-100" alt="Room 1">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://q-xx.bstatic.com/xdata/images/hotel/max1024x768/318841685.jpg?k=27331660d82c1d6a16928af5e2e7638684628a3e3450fbe6cc4c34b6f513489a&o=&s=1024x"
-                                             class="d-block w-100" alt="Room 2">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://pix8.agoda.net/property/31438103/907613602/1953e295294f73b9ac755c40d23f4ced.jpeg?ce=0&s=1024x"
-                                             class="d-block w-100" alt="Room 3">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://pix8.agoda.net/property/31438103/751988218/6f11ad14be08cf6d90a8698bd7173548.jpeg?ce=2&s=1024x"
-                                             class="d-block w-100" alt="Bath 1">
-                                    </div>
+                    <!-- Left column: carousel -->
+                    <div class="col-lg-6">
+                        <div id="hotelCarousel1" class="carousel slide hotel-carousel-section"
+                             data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="https://q-xx.bstatic.com/xdata/images/hotel/max1024x768/318841662.jpg?k=7936689244f49daa6c679cb73506fc539b72b398d8edcf13980e40d6fe064a2e&o=&s=1024x"
+                                         class="d-block w-100" alt="Room 1">
                                 </div>
-                                <!-- Buttons -->
-                                <button class="carousel-control-prev" type="button" data-bs-target="#hotelCarousel1"
-                                        data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon"></span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#hotelCarousel1"
-                                        data-bs-slide="next">
-                                    <span class="carousel-control-next-icon"></span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Right column: card -->
-                        <div class="col-lg-4 ms-auto mt-lg-0 mt-4">
-                            <div class="card shadow-sm border-0 text-center p-3" style="border-radius: 12px;">
-                                <div class="card-body">
-                                    <h5 class="card-title fw-bold text-dark">Deluxe Room</h5>
-                                    <p class="card-text text-secondary">
-                                        One double bed and 2 sofas, sea view.
-                                    </p>
-                                    <p class="fw-bold text-dark fs-5 mb-3">
-                                        from <span class="text-success fw-bold">$150</span> / night
-                                    </p>
+                                <div class="carousel-item">
+                                    <img src="https://q-xx.bstatic.com/xdata/images/hotel/max1024x768/318841685.jpg?k=27331660d82c1d6a16928af5e2e7638684628a3e3450fbe6cc4c34b6f513489a&o=&s=1024x"
+                                         class="d-block w-100" alt="Room 2">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://pix8.agoda.net/property/31438103/907613602/1953e295294f73b9ac755c40d23f4ced.jpeg?ce=0&s=1024x"
+                                         class="d-block w-100" alt="Room 3">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://pix8.agoda.net/property/31438103/751988218/6f11ad14be08cf6d90a8698bd7173548.jpeg?ce=2&s=1024x"
+                                         class="d-block w-100" alt="Bath 1">
                                 </div>
                             </div>
+                            <!-- Buttons -->
+                            <button class="carousel-control-prev" type="button" data-bs-target="#hotelCarousel1"
+                                    data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#hotelCarousel1"
+                                    data-bs-slide="next">
+                                <span class="carousel-control-next-icon"></span>
+                            </button>
                         </div>
+                    </div>
 
+                    <!-- Right column: card -->
+                    <div class="col-lg-4 ms-auto mt-lg-0 mt-4">
+                        <div class="card shadow-sm border-0 text-center p-3" style="border-radius: 12px;">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold text-dark">Turkey</h5>
+                                <p class="card-text text-secondary">
+                                    Paradise on the water: villas over the lagoon, white sand and crystal clear sea.
+                                </p>
+                                <p class="fw-bold text-dark fs-5 mb-3">
+                                    from <span class="text-success fw-bold">$200</span> / night
+                                </p>
+                                <a href="{% url 'home:booking_create' %}" class="btn btn-primary btn-lg">
+                                    Booking
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Egypt Rooms -->
+            <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6 mb-5">
+                <div class="row align-items-center">
+
+                    <!-- Left column: carousel -->
+                    <div class="col-lg-6">
+                        <div id="hotelCarousel2" class="carousel slide hotel-carousel-section"
+                             data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="https://pix8.agoda.net/property/31438103/751988218/9803d331bfa031bceb4dc7a3a76c2716.jpeg?ce=2&s=1024x"
+                                         class="d-block w-100" alt="Room 1">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://pix8.agoda.net/property/31438103/751988218/ee7a56105bd32781ff61628496f71bd2.jpeg?ce=2&s=1024x"
+                                         class="d-block w-100" alt="Room 2">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://pix8.agoda.net/property/31438103/751988218/8152f8463867672b833f6e7759b59fbe.jpeg?ce=2&s=1024x"
+                                         class="d-block w-100" alt="Room 3">
+                                </div>
+                            </div>
+                            <!-- Buttons -->
+                            <button class="carousel-control-prev" type="button" data-bs-target="#hotelCarousel2"
+                                    data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#hotelCarousel2"
+                                    data-bs-slide="next">
+                                <span class="carousel-control-next-icon"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right column: card -->
+                    <div class="col-lg-4 ms-auto mt-lg-0 mt-4">
+                        <div class="card shadow-sm border-0 text-center p-3" style="border-radius: 12px;">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold text-dark">Egypt</h5>
+                                <p class="card-text text-secondary">
+                                    Tropical comfort among palm trees, sunsets and an atmosphere of complete relaxation.
+                                </p>
+                                <p class="fw-bold text-dark fs-5 mb-3">
+                                    from <span class="text-success fw-bold">$170</span> / night
+                                </p>
+                                <a href="{% url 'home:booking_create' %}" class="btn btn-primary btn-lg">
+                                    Booking
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Mexico Rooms -->
+            <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6">
+                <div class="row align-items-center">
+
+                    <!-- Left column: carousel -->
+                    <div class="col-lg-6">
+                        <div id="hotelCarousel3" class="carousel slide hotel-carousel-section"
+                             data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="https://pix8.agoda.net/property/38579101/755635089/1924f8fa2303dd439b9b5a80a01630b6.jpeg?ce=0&s=1024x"
+                                         class="d-block w-100" alt="Room 1">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://pix8.agoda.net/property/36682169/607290691/eabe3ef40b74babd2a4d97865886d01d.jpeg?ce=0&s=1024x"
+                                         class="d-block w-100" alt="Room 2">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://pix8.agoda.net/property/36682169/607290691/5094e20541c9920d43164dbf922e9225.jpeg?ce=0&s=1024x"
+                                         class="d-block w-100" alt="Room 3">
+                                </div>
+                            </div>
+                            <!-- Buttons -->
+                            <button class="carousel-control-prev" type="button" data-bs-target="#hotelCarousel3"
+                                    data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#hotelCarousel3"
+                                    data-bs-slide="next">
+                                <span class="carousel-control-next-icon"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right column: card -->
+                    <div class="col-lg-4 ms-auto mt-lg-0 mt-4">
+                        <div class="card shadow-sm border-0 text-center p-3" style="border-radius: 12px;">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold text-dark">Mexico</h5>
+                                <p class="card-text text-secondary">
+                                    Luxury all-inclusive resorts on the Caribbean coast.
+                                </p>
+                                <p class="fw-bold text-dark fs-5 mb-3">
+                                    from <span class="text-success fw-bold">$150</span> / night
+                                </p>
+                                <a href="{% url 'home:booking_create' %}" class="btn btn-primary btn-lg">
+                                    Booking
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Family Room -->
-                <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6 mb-5">
-                    <div class="row align-items-center">
+            <!-- Bali Rooms -->
+            <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6">
+                <div class="row align-items-center">
 
-                        <!-- Left column: carousel -->
-                        <div class="col-lg-6">
-                            <div id="hotelCarousel2" class="carousel slide hotel-carousel-section"
-                                 data-bs-ride="carousel">
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <img src="https://pix8.agoda.net/property/31438103/751988218/9803d331bfa031bceb4dc7a3a76c2716.jpeg?ce=2&s=1024x"
-                                             class="d-block w-100" alt="Room 1">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://pix8.agoda.net/property/31438103/751988218/ee7a56105bd32781ff61628496f71bd2.jpeg?ce=2&s=1024x"
-                                             class="d-block w-100" alt="Room 2">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://pix8.agoda.net/property/31438103/751988218/8152f8463867672b833f6e7759b59fbe.jpeg?ce=2&s=1024x"
-                                             class="d-block w-100" alt="Bath 1">
-                                    </div>
+                    <!-- Left column: carousel -->
+                    <div class="col-lg-6">
+                        <div id="hotelCarousel4" class="carousel slide hotel-carousel-section"
+                             data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/351021341.jpg?k=bae778f36165bcedbdc87d1e4e8180f9d454381698d88ceec4b41fb0f9952831&o="
+                                         class="d-block w-100" alt="Room 1">
                                 </div>
-                                <!-- Buttons -->
-                                <button class="carousel-control-prev" type="button" data-bs-target="#hotelCarousel2"
-                                        data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon"></span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#hotelCarousel2"
-                                        data-bs-slide="next">
-                                    <span class="carousel-control-next-icon"></span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Right column: card -->
-                        <div class="col-lg-4 ms-auto mt-lg-0 mt-4">
-                            <div class="card shadow-sm border-0 text-center p-3" style="border-radius: 12px;">
-                                <div class="card-body">
-                                    <h5 class="card-title fw-bold text-dark">Family Room</h5>
-                                    <p class="card-text text-secondary">
-                                        One double and 2 single beds.
-                                    </p>
-                                    <p class="fw-bold text-dark fs-5 mb-3">
-                                        from <span class="text-success fw-bold">$130</span> / night
-                                    </p>
+                                <div class="carousel-item">
+                                    <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/371029365.jpg?k=8fd99ecde16b3065cb66e28460f7120ec53d4c780d0ef50a5f2bc2a1ab770ff8&o="
+                                         class="d-block w-100" alt="Room 2">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/351021508.jpg?k=571066dc6ab1ebeb4b63b52024df99cc6623f92a5380b28e594997070f769db8&o="
+                                         class="d-block w-100" alt="Room 3">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/351020527.jpg?k=d5d33f3a225c7aeb0ce6fa4ebcf89c7513d75ce8552ff30115c4af1d02329e6a&o="
+                                         class="d-block w-100" alt="Room 4">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/351021577.jpg?k=a3f689060d66c7ac634b99c53b0eedb8ac1e0a53d148ca0e3a4f875e762095d0&o="
+                                         class="d-block w-100" alt="Room 5">
                                 </div>
                             </div>
+                            <!-- Buttons -->
+                            <button class="carousel-control-prev" type="button" data-bs-target="#hotelCarousel4"
+                                    data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#hotelCarousel4"
+                                    data-bs-slide="next">
+                                <span class="carousel-control-next-icon"></span>
+                            </button>
                         </div>
+                    </div>
 
+                    <!-- Right column-card -->
+                    <div class="col-lg-4 ms-auto mt-lg-0 mt-4">
+                        <div class="card shadow-sm border-0 text-center p-3" style="border-radius: 12px;">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold text-dark">Bali</h5>
+                                <p class="card-text text-secondary">
+                                    Natural energy, rice terraces and Balinese-chic hotels.
+                                </p>
+                                <p class="fw-bold text-dark fs-5 mb-3">
+                                    from <span class="text-success fw-bold">$130</span> / night
+                                </p>
+                                <a href="{% url 'home:booking_create' %}" class="btn btn-primary btn-lg">
+                                    Booking
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Standard Room -->
-                <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6">
-                    <div class="row align-items-center">
-
-                        <!-- Left column: carousel -->
-                        <div class="col-lg-6">
-                            <div id="hotelCarousel3" class="carousel slide hotel-carousel-section"
-                                 data-bs-ride="carousel">
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <img src="https://pix8.agoda.net/property/38579101/755635089/1924f8fa2303dd439b9b5a80a01630b6.jpeg?ce=0&s=1024x"
-                                             class="d-block w-100" alt="Room 1">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://pix8.agoda.net/property/36682169/607290691/eabe3ef40b74babd2a4d97865886d01d.jpeg?ce=0&s=1024x"
-                                             class="d-block w-100" alt="Room 2">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://pix8.agoda.net/property/36682169/607290691/5094e20541c9920d43164dbf922e9225.jpeg?ce=0&s=1024x"
-                                             class="d-block w-100" alt="Bath 1">
-                                    </div>
+            <!-- Malaysia Rooms -->
+            <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <div id="hotelCarousel5" class="carousel slide hotel-carousel-section">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/702312427.jpg?k=02c0e429cafedd45843068d0b86d168d472bb68ba67e342a9d06cd8091495755&o="
+                                         class="d-block w-100" alt="Room 1">
                                 </div>
-                                <!-- Buttons -->
-                                <button class="carousel-control-prev" type="button" data-bs-target="#hotelCarousel3"
-                                        data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon"></span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#hotelCarousel3"
-                                        data-bs-slide="next">
-                                    <span class="carousel-control-next-icon"></span>
-                                </button>
+                                <div class="carousel-item">
+                                    <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/485610347.jpg?k=315258afa11e4abb236c87162598dc2c23b54d883232e4eed2ad8323f39d031f&o="
+                                         class="d-block w-100" alt="Room 2">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/517072755.jpg?k=01b09718e9477507ae70740725f435bc211fa3c34a34df7c08cbb853ec340381&o="
+                                         class="d-block w-100" alt="Room 3">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/336869252.jpg?k=95b339ab895cba42a1c99c3752dbc3ef86de6b55992db468e679947676a63d5e&o="
+                                         class="d-block w-100" alt="Room 4">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/336867029.jpg?k=18bb77e4b7ff213adfe7bf2e3d3731c654c55dc869ad189c12d4b6dbe4d2c2ac&o="
+                                         class="d-block w-100" alt="Room 5">
+                                </div>
+                            </div>
+
+                            <!-- Buttons -->
+                            <button class="carousel-control-prev" type="button" data-bs-target="#hotelCarousel5"
+                                    data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#hotelCarousel5"
+                                    data-bs-slide="next">
+                                <span class="carousel-control-next-icon"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right column-card -->
+                    <div class="col-lg-4 ms-auto mt-lg-0 mt-4">
+                        <div class="card shadow-sm border-0 text-center p-3" style="border-radius: 12px;">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold text-dark">Malaysia</h5>
+                                <p class="card-text text-secondary">
+                                    Modern resorts with ocean, golf and Asian comfort.
+                                </p>
+                                <p class="fw-bold text-dark fs-5 mb-3">
+                                    from <span class="text-success fw-bold">$125</span> / night
+                                </p>
+                                <a href="{% url 'home:booking_create' %}" class="btn btn-primary btn-lg">
+                                    Booking
+                                </a>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
 
-                        <!-- Right column: card -->
-                        <div class="col-lg-4 ms-auto mt-lg-0 mt-4">
-                            <div class="card shadow-sm border-0 text-center p-3" style="border-radius: 12px;">
-                                <div class="card-body">
-                                    <h5 class="card-title fw-bold text-dark">Standard Room</h5>
-                                    <p class="card-text text-secondary">
-                                        One double and 2 single beds.
-                                    </p>
-                                    <p class="fw-bold text-dark fs-5 mb-3">
-                                        from <span class="text-success fw-bold">$110</span> / night
-                                    </p>
+            <!-- Thailand Rooms -->
+            <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6">
+                <div class="row align-items-center">
+
+                    <!-- Left column: carousel -->
+                    <div class="col-lg-6">
+                        <div id="hotelCarousel6" class="carousel slide hotel-carousel-section"
+                             data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/67095074.jpg?k=c0c9bb636e80b2e7b4146387dd5417b8fb412faa21d798d91c9b3609eed443e1&o="
+                                         class="d-block w-100" alt="Room 1">
                                 </div>
+                                <div class="carousel-item">
+                                    <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/245045804.jpg?k=5d8e8cee5190e342272699df53a9945acff7b338b5196fba8c1906bcd389e0b1&o="
+                                         class="d-block w-100" alt="Room 2">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/245047316.jpg?k=6a7d9db98c56b3b9115542830e432b242a261381c4b700723b09ee12d6420a2c&o="
+                                         class="d-block w-100" alt="Room 3">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/245045660.jpg?k=eaad1adad155ba1b9bbd652ca405c424727f647a997cc8e08b98de336a664dfa&o="
+                                         class="d-block w-100" alt="Room 4">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/344069612.jpg?k=442054f4f2c055f6636171c5243b5a0f689e492cbbdd858acc5e690cd837f8b9&o="
+                                         class="d-block w-100" alt="Room 5">
+                                </div>
+                            </div>
+                            <!-- Buttons -->
+                            <button class="carousel-control-prev" type="button" data-bs-target="#hotelCarousel6"
+                                    data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#hotelCarousel6"
+                                    data-bs-slide="next">
+                                <span class="carousel-control-next-icon"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right column-card -->
+                    <div class="col-lg-4 ms-auto mt-lg-0 mt-4">
+                        <div class="card shadow-sm border-0 text-center p-3" style="border-radius: 12px;">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold text-dark">Thailand</h5>
+                                <p class="card-text text-secondary">
+                                    Tropical comfort among palm trees, sunsets and an atmosphere of complete relaxation.
+                                </p>
+                                <p class="fw-bold text-dark fs-5 mb-3">
+                                    from <span class="text-success fw-bold">$150</span> / night
+                                </p>
+                                <a href="{% url 'home:booking_create' %}" class="btn btn-primary btn-lg">
+                                    Booking
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        </div>
+        </div>
     </section>
 
-{% endblock content %}
+    {% endblock content %}
 
-<!-- Specific Page JS goes HERE  -->
-{% block javascripts %}
+    <!-- Specific Page JS goes HERE  -->
+    {% block javascripts %}
 
     <script>
         // get the element to animate
@@ -287,6 +520,6 @@
             }, 6);
         }
     </script>
-    </main>
+</main>
 
 {% endblock javascripts %}

@@ -1,4 +1,6 @@
 import re
+from types import NoneType
+
 from django.utils import timezone
 
 from django.core.exceptions import ValidationError
@@ -21,13 +23,6 @@ class Hotel(models.Model):
         return f'{self.name} ({self.city})'
 
 
-class RoomType(models.Model):
-    name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name
-
-
 class Amenity(models.Model):
     name = models.CharField(max_length=100)
 
@@ -35,37 +30,38 @@ class Amenity(models.Model):
         return self.name
 
 class Room(models.Model):
-    STATUS_CHOICES = [
-        ("available", "Available"),
-        ("occupied", "Occupied"),
-        ("repair", "Repair"),
-    ]
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='rooms')
     name = models.CharField(max_length=100)
     number = models.IntegerField()
-    room_type = models.ForeignKey('RoomType', on_delete=models.CASCADE, related_name='rooms')
     price_per_night = models.DecimalField(max_digits=10, decimal_places=2)
     max_guests = models.PositiveIntegerField(default=1)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="available")
+    status = models.CharField(max_length=20, default="available")
     amenities = models.ManyToManyField(Amenity, related_name='rooms')
 
-    def is_available(self, check_in, check_out):
+    def is_available(self, check_in, check_out, exclude_booking_id=None):
         overlapping_bookings = self.bookings.filter(
             Q(check_in__lt=check_out) & Q(check_out__gt=check_in),
             status='accepted'
         )
+        if exclude_booking_id:
+            overlapping_bookings = overlapping_bookings.exclude(pk=exclude_booking_id)
+
         return not overlapping_bookings.exists()
 
     def __str__(self):
-        return f'{self.name} - Room {self.number} - {self.room_type.name}'
+        return f'{self.name or "No name"} - Room {self.number or "No number"}'
 
 
 class Booking(models.Model):
-    STATUS_CHOICES = [
-        ("accepted", "Accepted"),
-        ("cancelled", "Cancelled"),
-        ("pending", "Pending"),
-    ]
-
+    status = models.CharField(
+        max_length=20,
+        choices=[
+            ('pending', 'Pending'),
+            ('accepted', 'Accepted'),
+            ('cancelled', 'Cancelled'),
+        ],
+        default='pending'
+    )
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bookings')
     room = models.ForeignKey('Room', on_delete=models.CASCADE, related_name='bookings')
 
@@ -80,21 +76,14 @@ class Booking(models.Model):
     guests = models.PositiveIntegerField(default=1)
 
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
-    status = models.CharField(max_length=20,
-                              choices=[
-                                  ('pending', 'Pending'),
-                                  ('accepted', 'Accepted'),
-                                  ('cancelled', 'Cancelled'),
-                                  ('repair', 'Repair'),
-                              ],
-                              default='pending')
+    status = models.CharField(max_length=20)
 
     created_at = models.DateTimeField(auto_now_add=True)
 
     def clean(self):
         errors = {}
         # Check room availability
-        if not self.room.is_available(self.check_in, self.check_out):
+        if not self.room.is_available(self.check_in, self.check_out, exclude_booking_id=self.pk):
             errors["room"] = "The room is not available on the selected dates."
 
         # Checking the number of guests

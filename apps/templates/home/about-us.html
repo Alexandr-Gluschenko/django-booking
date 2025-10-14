@@ -9,30 +9,30 @@
 
 {% block content %}
 
-    <!-- sidebar -->
+<!-- sidebar -->
 
-    {% include 'includes/navigation-transparent.html' %}
+{% include 'includes/navigation-transparent.html' %}
 
-    <div class="sidebar">
+<div class="sidebar">
     {% include 'includes/sidebar.html' %}
-    </div>
+</div>
 
-            <header class="bg-gradient-dark">
-                <div class="page-header min-vh-100" style=" background-image: url('{{ ASSETS_ROOT }}/img/turkey.jpg');">
-                    <span class="mask bg-gradient-dark opacity-6"></span>
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-8 text-center mx-auto my-auto">
-                                <h1 class="text-white">Booking is easy and simple</h1>
-                                <h5 class="text-white">Ready to relax? Book a hotel in a few clicks.</h5>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-center my-5">
-                             <a href="booking_list.html" class="btn btn-primary btn-lg">
-                                Hotel List
-                            </a>
-                        </div>
-                    </div>
+<header class="bg-gradient-dark">
+    <div class="page-header min-vh-100" style=" background-image: url('{{ ASSETS_ROOT }}/img/turkey.jpg');">
+        <span class="mask bg-gradient-dark opacity-6"></span>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center mx-auto my-auto">
+                    <h1 class="text-white">Booking is easy and simple</h1>
+                    <h5 class="text-white">Ready to relax? Book a hotel in a few clicks.</h5>
                 </div>
-            </header>
+            </div>
+            <div class="d-flex justify-content-center my-5">
+                <a href="{% url 'home:hotel_page' %}" class="btn btn-primary btn-lg">
+                    Hotel List
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
 {% endblock content %}
