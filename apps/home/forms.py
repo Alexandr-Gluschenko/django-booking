@@ -55,3 +55,7 @@ class BookingForm(forms.ModelForm):
             if room and not room.is_available(check_in, check_out):
                 raise ValidationError("The room must be available.")
         return cleaned_data
+
+
+class BookSearchForm(forms.Form):
+    name = forms.CharField(required=False, label='City')

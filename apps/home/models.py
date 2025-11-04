@@ -32,8 +32,8 @@ class Amenity(models.Model):
 class Room(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='rooms')
     name = models.CharField(max_length=100)
-    number = models.IntegerField()
-    price_per_night = models.DecimalField(max_digits=10, decimal_places=2)
+    number = models.IntegerField(null=True)
+    price_per_night = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     max_guests = models.PositiveIntegerField(default=1)
     status = models.CharField(max_length=20, default="available")
     amenities = models.ManyToManyField(Amenity, related_name='rooms')

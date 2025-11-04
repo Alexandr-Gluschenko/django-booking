@@ -1,4 +1,5 @@
 from datetime import timezone, datetime
+from decimal import Decimal
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django import template
@@ -13,7 +14,7 @@ from django import forms
 from django.views.generic import TemplateView
 from django.contrib import messages
 
-from apps.home.forms import BookingForm
+from apps.home.forms import BookingForm, BookSearchForm
 from apps.home.models import Booking, Room, Hotel
 
 
@@ -65,32 +66,12 @@ class BookingConfirmationView(DetailView):
 class HotelListView(ListView):
     model = Hotel
     template_name = 'home/hotel_page.html'
+    context_object_name = 'hotels'
 
-    def get_queryset(self):
-        queryset = super().get_queryset().distinct()
-
-        name = self.request.GET.get("name")
-        min_price = self.request.GET.get("min_price")
-        max_price = self.request.GET.get("max_price")
-
-        if name:
-            queryset = queryset.filter(name__icontains=name)
-
-        if min_price:
-            try:
-                min_price = float(min_price)
-                queryset = queryset.filter(rooms__price_per_night__gte=min_price)
-            except ValueError:
-                pass
-
-        if max_price:
-            try:
-                max_price = float(max_price)
-                queryset = queryset.filter(rooms__price_per_night__lte=max_price)
-            except ValueError:
-                pass
-
-        return queryset.distinct()
+    def get_context_data(self, *, object_list =None, **kwargs):
+        context = super(HotelListView, self).get_context_data(**kwargs)
+        context["search_form"] = BookSearchForm()
+        return context
 
 
 class AboutUsView(TemplateView):
@@ -105,16 +86,11 @@ class BookingListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return Booking.objects.filter(user=self.request.user)
 
+
 class RoomListView(ListView):
     model = Room
     template_name = "home/room_list.html"
     context_object_name = "rooms"
-
-
-class RoomDetailView(DetailView):
-    model = Room
-    template_name = "home/room_detail.html"
-    context_object_name = "room"
 
 
 @method_decorator(login_required, name="dispatch")

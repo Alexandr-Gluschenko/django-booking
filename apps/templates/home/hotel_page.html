@@ -29,27 +29,15 @@
             </div>
 
             <!-- card -->
-            <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6 mb-5">
+            <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6 mb-5" style="padding: 10px 15px;">
                 <div class="row align-items-center"></div>
-                <form method="GET" action="{% url 'home:hotel_page' %}" class="w-100">
+                <form method="get" action="{% url 'home:hotel_page' %}" class="w-50">
                     <div class="row g-3">
 
                         <!-- Hotel name -->
                         <div class=" col-md-4">
-                            <input type="text" name="name" class="form-control" placeholder="Search by hotel name"
+                            <input type="text" name="name" class="form-control text-center" placeholder="Search by hotel city"
                             value="{{ request.GET.name }}">
-                        </div>
-
-                        <!-- Min price -->
-                        <div class="col-md-3">
-                            <input type="number" name="min_price" class="form-control" placeholder="Min price"
-                            value="{{ request.GET.min_price }}">
-                        </div>
-
-                        <!-- Max price -->
-                        <div class="col-md-3">
-                            <input type="number" name="max_price" class="form-control" placeholder="Max price"
-                            value="{{ request.GET.max_price }}">
                         </div>
 
                         <!-- Search button -->
@@ -61,17 +49,9 @@
             </div>
         </div>
 
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8 text-center mx-auto my-auto">
-                </div>
-            </div>
-        </div>
-        </header>
-
         <div class="container" style="padding: 5%">
 
-            <!-- Turkey Rooms -->
+            <!-- Turkey Rooms-->
             <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6 mb-5">
                 <div class="row align-items-center">
 

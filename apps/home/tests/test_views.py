@@ -4,13 +4,13 @@ from django.shortcuts import redirect
 from django.urls import reverse
 
 from apps.home.forms import BookingForm
-from apps.home.models import Room, RoomType, Booking
+from apps.home.models import Room, Booking
 from django.test import TestCase
 
 
 class BookingTest(TestCase):
     def setUp(self):
-        self.room_type = RoomType.objects.create(name='Deluxe')
+        self.room_type = Room.objects.create(name='Deluxe')
         self.room = Room.objects.create(name='Egypt',
                                         number=101,
                                         room_type=self.room_type,
@@ -25,7 +25,7 @@ class BookingTest(TestCase):
 
 class BookingTest2(TestCase):
     def setUp(self):
-        self.room_type = RoomType.objects.create(name='Deluxe')
+        self.room_type = Room.objects.create(name='Deluxe')
         self.room = Room.objects.create(name='Egypt',
                                         number=101,
                                         room_type=self.room_type,
@@ -48,16 +48,15 @@ class BookingTest2(TestCase):
 
         booking = Booking.objects.get(name='Alex')
         self.assertEqual(booking.room, self.room)
-        self.assertEqual(booking.rooms_count, 1)
-        self.assertEqual(booking.start_date.isoformat(), '2025-09-09')
-        self.assertEqual(booking.end_date.isoformat(), '2025-09-11')
-        self.assertEqual(booking.guest_count, 2)
+        self.assertEqual(booking.check_in.isoformat(), '2025-09-09')
+        self.assertEqual(booking.check_out.isoformat(), '2025-09-11')
+        self.assertEqual(booking.guests, 2)
         self.assertEqual(booking.phone, '+380974637685')
 
 
 class BookingTest3(TestCase):
     def setUp(self):
-        self.room_type = RoomType.objects.create(name='Deluxe')
+        self.room_type = Room.objects.create(name='Deluxe')
         self.room = Room.objects.create(name='Egypt',
                                         number=101,
                                         room_type=self.room_type,
@@ -82,7 +81,7 @@ class BookingTest3(TestCase):
 
 class BookingTest4(TestCase):
     def setUp(self):
-        self.room_type = RoomType.objects.create(name='Deluxe')
+        self.room_type = Room.objects.create(name='Deluxe')
         self.room = Room.objects.create(
             name='Egypt',
             number=101,
@@ -114,7 +113,7 @@ class BookingTest4(TestCase):
 
 class BookingTest5(TestCase):
     def setUp(self):
-        self.room_type = RoomType.objects.create(name='Deluxe')
+        self.room_type = Room.objects.create(name='Deluxe')
         self.room = Room.objects.create(name='Egypt',
                                         number=101,
                                         room_type=self.room_type,

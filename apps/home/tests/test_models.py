@@ -1,19 +1,19 @@
 import datetime
 
-from apps.home.models import Room, RoomType, Booking
+from apps.home.models import Room, Booking
 from django.test import TestCase
 
 
 class RoomModelTest(TestCase):
     def setUp(self):
-        self.room_type = RoomType.objects.create(name="Deluxe")
+        self.room = Room.objects.create(name="Deluxe")
 
     # Check: The room is created with the correct type and price
     def test_room_creation_with_type_and_price(self):
         room = Room.objects.create(
             name="Egypt",
             number=101,
-            room_type=self.room_type,
+            room_type=self.room,
             price_per_night=150.00
         )
 
@@ -21,11 +21,11 @@ class RoomModelTest(TestCase):
         self.assertEqual(room.name, "Egypt")
         self.assertEqual(room.number, 101)
         self.assertEqual(room.price_per_night, 150.00)
-        self.assertEqual(room.room_type, self.room_type)
+        self.assertEqual(room.room, self.room)
 
 class BookingModelTest(TestCase):
     def setUp(self):
-        self.room_type = RoomType.objects.create(name="Deluxe")
+        self.room_type = Room.objects.create(name="Deluxe")
 
         self.room = Room.objects.create(
             name="Egypt",
@@ -40,24 +40,23 @@ class BookingModelTest(TestCase):
             name="Alex",
             room=self.room,
             rooms_count=1,
-            start_date=datetime.date(2025, 9, 9),
-            end_date=datetime.date(2025, 9, 11),
-            guest_count=2,
+            check_in=datetime.date(2025, 9, 9),
+            check_out=datetime.date(2025, 9, 11),
+            guests=2,
             phone="+380974637685"
         )
 
-        self.assertEqual(booking.name, "Alex")
+        self.assertEqual(booking.user, "Alex")
         self.assertEqual(booking.room, self.room)
-        self.assertEqual(booking.rooms_count, 1)
-        self.assertEqual(booking.start_date, datetime.date(2025, 9, 9))
-        self.assertEqual(booking.end_date, datetime.date(2025, 9, 11))
-        self.assertEqual(booking.guest_count, 2)
+        self.assertEqual(booking.check_in, datetime.date(2025, 9, 9))
+        self.assertEqual(booking.check_out, datetime.date(2025, 9, 11))
+        self.assertEqual(booking.guests, 2)
         self.assertEqual(booking.phone, "+380974637685")
 
 
 class BookingModelPriceTest(TestCase):
     def setUp(self):
-        self.room_type = RoomType.objects.create(name="Deluxe")
+        self.room_type = Room.objects.create(name="Deluxe")
 
         self.room = Room.objects.create(
             name="Egypt",
@@ -69,8 +68,8 @@ class BookingModelPriceTest(TestCase):
     def test_checking_price_correctly(self):
         booking = Booking.objects.create(
             room=self.room,
-            start_date=datetime.date(2025, 9, 9),
-            end_date=datetime.date(2025, 9, 11),
+            check_in=datetime.date(2025, 9, 9),
+            check_out=datetime.date(2025, 9, 11),
             name="Alex"
         )
 

@@ -1,6 +1,6 @@
 from django.urls import path, re_path
 from apps.home.views import BookingCreateView, IndexView, BookingConfirmationView, \
-    AboutUsView, HotelListView, RoomListView, BookingListView, RoomDetailView, MyBookingsView, cancel_booking, \
+    AboutUsView, HotelListView, RoomListView, BookingListView, MyBookingsView, cancel_booking, \
     edit_booking
 
 app_name = "home"
@@ -13,7 +13,6 @@ urlpatterns = [
     path('about_us/', AboutUsView.as_view(), name='about_us'),
     # Rooms and types
     path('rooms/', RoomListView.as_view(), name='room_list'),
-    path('rooms/<int:pk>/', RoomDetailView.as_view(), name='room_detail'),
     # Bookings
     path('bookings/', BookingListView.as_view(), name='booking_list'),
     path('bookings/create/', BookingCreateView.as_view(), name='booking_create'),
