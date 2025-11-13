@@ -3,17 +3,26 @@ import datetime
 from django.shortcuts import redirect
 from django.urls import reverse
 
+from django.contrib.auth import get_user_model
 from apps.home.forms import BookingForm
-from apps.home.models import Room, Booking
+from apps.home.models import Room, Booking, Hotel
 from django.test import TestCase
 
 
+User = get_user_model()
+
 class BookingTest(TestCase):
     def setUp(self):
-        self.room_type = Room.objects.create(name='Deluxe')
+        self.hotel = Hotel.objects.create(
+            name="Hilton",
+            country="Turkey",
+            city="Istanbul",
+            address="Main Street 1",
+            description="Luxury hotel"
+        )
         self.room = Room.objects.create(name='Egypt',
+                                        hotel=self.hotel,
                                         number=101,
-                                        room_type=self.room_type,
                                         price_per_night=150.00)
 
     # Check: the booking creation page opens and contains a valid BookingForm
@@ -25,10 +34,17 @@ class BookingTest(TestCase):
 
 class BookingTest2(TestCase):
     def setUp(self):
-        self.room_type = Room.objects.create(name='Deluxe')
+        self.hotel = Hotel.objects.create(
+            name="Hilton",
+            country="Turkey",
+            city="Istanbul",
+            address="Main Street 1",
+            description="Luxury hotel"
+        )
+
         self.room = Room.objects.create(name='Egypt',
+                                        hotel=self.hotel,
                                         number=101,
-                                        room_type=self.room_type,
                                         price_per_night=150.00)
 
     # Tests creating a booking with valid data
@@ -56,24 +72,31 @@ class BookingTest2(TestCase):
 
 class BookingTest3(TestCase):
     def setUp(self):
-        self.room_type = Room.objects.create(name='Deluxe')
+        self.hotel = Hotel.objects.create(
+            name="Hilton",
+            country="Turkey",
+            city="Istanbul",
+            address="Main Street 1",
+            description="Luxury hotel"
+        )
+
         self.room = Room.objects.create(name='Egypt',
+                                        hotel=self.hotel,
                                         number=101,
-                                        room_type=self.room_type,
                                         price_per_night=150.00)
 
     #Checks for redirect to confirmation page after successful booking
     def test_after_post_good_working_redirect(self):
         form_data = {
             'name': 'Alex',
-            'room': str(self.room.id),
+            'room': self.room.id,
             'rooms_count': 1,
             'start_date': '2025-09-09',
             'end_date': '2025-09-11',
             'guest_count': 2,
             'phone': '+380974637685',
         }
-        response = self.client.post('/booking/create/', data=form_data)
+        response = self.client.post('/bookings/create/', data=form_data)
         self.assertEqual(response.status_code, 302)
 
         self.assertRedirects(response, '/booking/1/confirmation/')
@@ -81,21 +104,30 @@ class BookingTest3(TestCase):
 
 class BookingTest4(TestCase):
     def setUp(self):
-        self.room_type = Room.objects.create(name='Deluxe')
-        self.room = Room.objects.create(
-            name='Egypt',
-            number=101,
-            room_type=self.room_type,
-            price_per_night=150.00
+
+        self.user = User.objects.create_user(username='Alex', password='testpass')
+
+        self.hotel = Hotel.objects.create(
+            name="Hilton",
+            country="Turkey",
+            city="Istanbul",
+            address="Main Street 1",
+            description="Luxury hotel"
         )
+
+        self.room = Room.objects.create(
+            hotel=self.hotel,
+            name="Deluxe",
+            number=101,
+            price_per_night=150.00,
+            max_guests=2,
+            status="available",
+        )
+
         self.booking = Booking.objects.create(
-            name='Alex',
+            user=self.user,
             phone='+380974637685',
-            start_date=datetime.date(2025, 9, 9),
-            end_date=datetime.date(2025, 9, 11),
             room=self.room,
-            rooms_count=2,
-            guest_count=2
         )
 
     # Checks that booking confirmation page displays booking details (name, dates, price).
@@ -113,11 +145,21 @@ class BookingTest4(TestCase):
 
 class BookingTest5(TestCase):
     def setUp(self):
-        self.room_type = Room.objects.create(name='Deluxe')
-        self.room = Room.objects.create(name='Egypt',
+        self.hotel = Hotel.objects.create(
+            name="Hilton",
+            country="Turkey",
+            city="Istanbul",
+            address="Main Street 1",
+            description="Luxury hotel"
+        )
+
+        self.room = Room.objects.create(hotel=self.hotel,
+                                        name='Egypt',
                                         number=101,
-                                        room_type=self.room_type,
-                                        price_per_night=150.00)
+                                        price_per_night=150.00,
+                                        max_guests=10,
+                                        status="available",
+                                        )
 
     #Checks that accessing booking confirmation page with nonexistent ID returns 404.
     def test_booking_confirmation_returns_404_for_nonexistent_booking(self):

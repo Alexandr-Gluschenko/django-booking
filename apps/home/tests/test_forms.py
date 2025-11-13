@@ -1,16 +1,22 @@
 import datetime
 from apps.home.forms import BookingForm
-from apps.home.models import Room, RoomType
+from apps.home.models import Room, Hotel, Booking
 from django.test import TestCase
 
 
 class BookingFormTest(TestCase):
     def setUp(self):
-        self.room_type = RoomType.objects.create(name='Deluxe')
+        self.hotel = Hotel.objects.create(
+            name="Hilton",
+            country="Turkey",
+            city="Istanbul",
+            address="Main Street 1",
+            description="Luxury hotel"
+        )
 
         self.room = Room.objects.create(name='Deluxe',
+                                        hotel=self.hotel,
                                         number=101,
-                                        room_type=self.room_type,
                                         price_per_night=150.00
                                         )
 
@@ -33,19 +39,25 @@ class BookingFormTest(TestCase):
 
 class BookingFormTest2(TestCase):
     def setUp(self):
-        room_type = RoomType.objects.create(name='Deluxe')
-        room = Room.objects.create(name='Deluxe',
-                                   number=101,
-                                   room_type=room_type,
-                                   price_per_night=150.00)
+        self.hotel = Hotel.objects.create(
+            name="Test Hotel",
+            country="Egypt",
+            city="Cairo",
+            address="Main Street 1",
+            description="A nice hotel for testing"
+        )
+        self.room = Room.objects.create(name='Deluxe',
+                                        hotel=self.hotel,
+                                        number=101,
+                                        price_per_night=150.00)
 
     # Check: Booking form fails without required fields
     def test_booking_form_fails_when_required_fields_missing(self):
         form_data = BookingForm(data={
             'name': '',
             'phone': '',
-            'start_date': '',
-            'end_date': '',
+            'check_in': '',
+            'check_out': '',
             'room': '',
         })
 
@@ -53,27 +65,35 @@ class BookingFormTest2(TestCase):
 
         self.assertIn('name', form_data.errors)
         self.assertIn('phone', form_data.errors)
-        self.assertIn('start_date', form_data.errors)
-        self.assertIn('end_date', form_data.errors)
+        self.assertIn('check_in', form_data.errors)
+        self.assertIn('check_out', form_data.errors)
         self.assertIn('room', form_data.errors)
 
 
 class BookingFormTest3(TestCase):
     def setUp(self):
-        self.room_type = RoomType.objects.create(name='Deluxe')
+        self.hotel = Hotel.objects.create(
+            name="Test Hotel",
+            country="Egypt",
+            city="Cairo",
+            address="Main Street 1",
+            description="A nice hotel for testing"
+        )
+
         self.room = Room.objects.create(name='Deluxe',
-                                   number=101,
-                                   room_type=self.room_type,
-                                   price_per_night=150.00)
+                                        hotel=self.hotel,
+                                        number=101,
+                                        price_per_night=150.00)
 
     # Booking form fails if end_date is earlier than start_date
     def test_booking_form_invalid_if_end_date_before_start_date(self):
         form_data = BookingForm(data={
             'name': 'Alex',
             'phone': '+380974637685',
-            'start_date': datetime.date(2025, 9, 11),
-            'end_date': datetime.date(2025, 9, 9),
-            'room': str(self.room.id)
+            'check_in': datetime.date(2025, 9, 11),
+            'check_out': datetime.date(2025, 9, 9),
+            'room': str(self.room.id),
+            'guests': 1
         })
 
         self.assertFalse(form_data.is_valid())
@@ -83,10 +103,17 @@ class BookingFormTest3(TestCase):
 
 class BookingFormTest4(TestCase):
     def setUp(self):
-        self.room_type = RoomType.objects.create(name='Deluxe')
+        self.hotel = Hotel.objects.create(
+            name="Test Hotel",
+            country="Egypt",
+            city="Cairo",
+            address="Main Street 1",
+            description="A nice hotel for testing"
+        )
+
         self.room = Room.objects.create(name='Deluxe',
+                                        hotel=self.hotel,
                                         number=101,
-                                        room_type=self.room_type,
                                         price_per_night=150.00)
 
     # Check: phone field is validated (only digits and minimum length)
