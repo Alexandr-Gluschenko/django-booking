@@ -36,7 +36,7 @@ class Room(models.Model):
     price_per_night = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     max_guests = models.PositiveIntegerField(default=1)
     status = models.CharField(max_length=20, default="available")
-    amenities = models.ManyToManyField(Amenity, related_name='rooms')
+    amenities = models.ManyToManyField(Amenity, related_name='rooms', blank=True)
 
     def is_available(self, check_in, check_out, exclude_booking_id=None):
         overlapping_bookings = self.bookings.filter(

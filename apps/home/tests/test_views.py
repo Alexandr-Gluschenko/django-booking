@@ -59,7 +59,7 @@ class BookingTest2(TestCase):
             'phone': '+380974637685',
         }
 
-        response = self.client.post('/booking/create/', data=form_data)
+        response = self.client.post('/bookings/create/', data=form_data)
         self.assertEqual(response.status_code, 302)
 
         booking = Booking.objects.get(name='Alex')
