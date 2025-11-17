@@ -43,7 +43,6 @@ class BookingForm(forms.ModelForm):
         cleaned_data = super().clean()
         check_in = cleaned_data.get('check_in')
         check_out = cleaned_data.get('check_out')
-        room = cleaned_data.get('room')
 
         if check_in and check_out:
             if check_in >= check_out:
@@ -51,11 +50,18 @@ class BookingForm(forms.ModelForm):
 
             if check_in < timezone.now():
                 raise ValidationError("The check-in date must be later than the current date.")
-
-            if room and not room.is_available(check_in, check_out):
-                raise ValidationError("The room must be available.")
         return cleaned_data
 
 
 class BookSearchForm(forms.Form):
-    name = forms.CharField(required=False, label='City')
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Search",
+                "class": "form-control"
+            }
+        )
+    )

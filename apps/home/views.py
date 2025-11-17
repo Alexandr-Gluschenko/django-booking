@@ -3,6 +3,7 @@ from decimal import Decimal
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django import template
+from django.db.models import Q
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
@@ -74,9 +75,32 @@ class HotelListView(ListView):
     context_object_name = 'hotels'
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(HotelListView, self).get_context_data(**kwargs)
-        context["search_form"] = BookSearchForm()
+        context = super().get_context_data(**kwargs)
+        context["search_form"] = BookSearchForm(self.request.GET)
+
+        print("FORM GET:", self.request.GET)
+        print("FORM INSTANCE:", context["search_form"])
         return context
+
+    def get_queryset(self):
+        queryset = Hotel.objects.all()
+        form = BookSearchForm(self.request.GET)
+
+        if form.is_valid():
+            name = form.cleaned_data["name"]
+            if name:
+                queryset = queryset.filter(
+                    Q(name__icontains=name) |
+                    Q(country__icontains=name) |
+                    Q(city__icontains=name) |
+                    Q(rooms__name__icontains=name)
+                ).distinct()
+
+                print("FILTER:", name)
+                print("RESULT COUNT:", queryset.count())
+                print("RESULT HOTELS:", list(queryset.values_list("name", flat=True)))
+
+        return queryset
 
 
 class AboutUsView(TemplateView):
@@ -125,8 +149,12 @@ def edit_booking(request, pk):
         form = BookingForm(request.POST, instance=booking)
 
         if form.is_valid():
-            form.save()
-            messages.success(request, "Booking updated successfully.")
+            updated_booking = form.save(commit=False)
+
+            updated_booking.status = "pending"
+
+            updated_booking.save()
+            messages.success(request, "Booking updated successfully. Waiting for admin approval again.")
             return redirect("home:my_bookings")
         else:
             messages.error(request, "Please correct the errors below.")
