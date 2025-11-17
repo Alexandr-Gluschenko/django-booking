@@ -46,11 +46,16 @@ class BookingCreateView(CreateView):
             form.fields['room'].queryset = Room.objects.all()
         return form
 
+    def form_invalid(self, form):
+        print("❌ Форма невалидна!")
+        print(form.errors)
+        return super().form_invalid(form)
+
     def form_valid(self, form):
+        print("Форма валидна:", form.is_valid())
         form.instance.user = self.request.user
         form.instance.price_per_night = form.instance.room.price_per_night
-        response = super().form_valid(form)
-        return response
+        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse_lazy("home:booking_confirmation", kwargs={"booking_id": self.object.id})
@@ -68,7 +73,7 @@ class HotelListView(ListView):
     template_name = 'home/hotel_page.html'
     context_object_name = 'hotels'
 
-    def get_context_data(self, *, object_list =None, **kwargs):
+    def get_context_data(self, *, object_list=None, **kwargs):
         context = super(HotelListView, self).get_context_data(**kwargs)
         context["search_form"] = BookSearchForm()
         return context
@@ -102,6 +107,7 @@ class MyBookingsView(ListView):
     def get_queryset(self):
         return Booking.objects.filter(user=self.request.user).order_by("-id")
 
+
 @login_required
 def cancel_booking(request, pk):
     booking = get_object_or_404(Booking, pk=pk, user=request.user)
@@ -110,25 +116,21 @@ def cancel_booking(request, pk):
     messages.success(request, "Your booking has been cancelled.")
     return redirect("home:my_bookings")
 
+
 @login_required
 def edit_booking(request, pk):
     booking = get_object_or_404(Booking, pk=pk, user=request.user)
 
     if request.method == "POST":
-        check_in_str = request.POST.get("check_in")
-        check_out_str = request.POST.get("check_out")
+        form = BookingForm(request.POST, instance=booking)
 
-        new_check_in = datetime.strptime(check_in_str, "%Y-%m-%d").date()
-        new_check_out = datetime.strptime(check_out_str, "%Y-%m-%d").date()
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Booking updated successfully.")
+            return redirect("home:my_bookings")
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = BookingForm(instance=booking)
 
-        if not booking.room.is_available(new_check_in, new_check_out, exclude_booking_id=booking.pk):
-            messages.error(request, "The room is not available for these dates.")
-            return render(request, "home/edit_booking.html", {"booking": booking})
-
-        booking.check_in = new_check_in
-        booking.check_out = new_check_out
-        booking.save()
-        messages.success(request, "Booking updated successfully.")
-        return redirect("home:my_bookings")
-
-    return render(request, "home/edit_booking.html", {"booking": booking})
+    return render(request, "home/edit_booking.html", {"form": form, "booking": booking})

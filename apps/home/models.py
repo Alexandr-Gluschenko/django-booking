@@ -62,7 +62,7 @@ class Booking(models.Model):
         ],
         default='pending'
     )
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bookings')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bookings', blank=True, null=True)
     room = models.ForeignKey('Room', on_delete=models.CASCADE, related_name='bookings')
 
     check_in = models.DateTimeField(default=timezone.now)
@@ -83,8 +83,14 @@ class Booking(models.Model):
     def clean(self):
         errors = {}
         # Check room availability
-        if not self.room.is_available(self.check_in, self.check_out, exclude_booking_id=self.pk):
-            errors["room"] = "The room is not available on the selected dates."
+        if self.room_id is None or self.check_in is None or self.check_out is None:
+            return
+
+        if not self.room.is_available(self.check_in,
+                                      self.check_out,
+                                      exclude_booking_id=self.pk):
+            raise ValidationError("Room is not available for these dates.")
+
 
         # Checking the number of guests
         if self.guests > self.room.max_guests:

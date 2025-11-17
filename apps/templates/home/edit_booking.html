@@ -94,14 +94,7 @@
                 <form method="post">
                     {% csrf_token %}
                     {{ form|crispy }}
-                    <div class="mb-3">
-                        <label>Check-in date:</label>
-                        <input type="date" name="check_in" value="{{ booking.check_in|date:'Y-m-d' }}" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label>Check-out date:</label>
-                        <input type="date" name="check_out" value="{{ booking.check_out|date:'Y-m-d' }}" class="form-control" required>
-                    </div>
+
                     <button type="submit" class="btn btn-primary">Save changes</button>
                     <a href="{% url 'home:my_bookings' %}" class="btn btn-secondary">Back</a>
                 </form>
