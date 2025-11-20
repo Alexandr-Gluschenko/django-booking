@@ -1,6 +1,5 @@
 import os, environ
-
-from django.conf import settings
+from pathlib import Path
 
 env = environ.Env(
     # set casting, default value
@@ -8,7 +7,7 @@ env = environ.Env(
 )
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+BASE_DIR = Path(__file__).resolve().parent.parent
 CORE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Take environment variables from .env file
@@ -150,6 +149,10 @@ STATICFILES_DIRS = (
 #############################################################
 #############################################################
 
+MIDDLEWARE += [
+    'apps.authentication.middleware.LoginRequiredMiddleware',
+]
+
 LOGIN_URL = 'login'
 
 LOGOUT_URL = 'logout'
@@ -163,3 +166,7 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = BASE_DIR / 'media'

@@ -3,12 +3,6 @@ from datetime import timezone
 from django import forms
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
-from apps.home.models import Booking
-
-
-from django import forms
-from django.core.validators import RegexValidator
-from django.core.exceptions import ValidationError
 from django.utils import timezone
 from .models import Booking
 
@@ -19,13 +13,13 @@ class BookingForm(forms.ModelForm):
         required=True,
         validators=[
             RegexValidator(
-                regex=r'^\+?1?\d{8,15}$',
-                message="Phone number must be entered in digits only (8-15 digits)."
+                r'^\+380\d{9}$',
+                "Phone must be in format +380XXXXXXXXX"
             )
         ],
         widget=forms.TextInput(attrs={
-            'placeholder': 'Enter your phone number',
-            'class': 'form-control'
+            'class': 'form-control',
+            'placeholder': '+380XXXXXXXXX'
         })
     )
 

@@ -1,50 +1,48 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
+from django.contrib import messages
 from .forms import LoginForm, SignUpForm
 
 
 def login_view(request):
-    form = LoginForm(request.POST or None)
-
-    msg = None
-
     if request.method == "POST":
+        form = LoginForm(request.POST)
 
         if form.is_valid():
-            username = form.cleaned_data.get("username")
-            password = form.cleaned_data.get("password")
-            user = authenticate(username=username, password=password)
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]
+
+            user = authenticate(request, username=username, password=password)
+
             if user is not None:
                 login(request, user)
-                return redirect("/")
+                messages.success(request, "You have successfully logged in.")
+                return redirect("home:index")
             else:
-                msg = 'Invalid credentials'
+                messages.error(request, "Invalid credentials.")
         else:
-            msg = 'Error validating the form'
+            messages.error(request, "Please correct the errors in the form.")
+    else:
+        form = LoginForm()
 
-    return render(request, "accounts/login.html", {"form": form, "msg": msg})
+    return render(request, "accounts/login.html", {"form": form})
 
 
 def register_user(request):
-    msg = None
-    success = False
-
     if request.method == "POST":
         form = SignUpForm(request.POST)
+
         if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get("username")
-            raw_password = form.cleaned_data.get("password1")
-            user = authenticate(username=username, password=raw_password)
+            user = form.save()
 
-            msg = 'Account created successfully.'
-            success = True
-
-            # return redirect("/login/")
+            login(request, user)
+            messages.success(request, "Account created successfully!")
+            return redirect("home:index")
 
         else:
-            msg = 'Form is not valid'
+            messages.error(request, "Please correct the errors below.")
+
     else:
         form = SignUpForm()
 
-    return render(request, "accounts/register.html", {"form": form, "msg": msg, "success": success})
+    return render(request, "accounts/register.html", {"form": form})
