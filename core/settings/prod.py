@@ -2,7 +2,11 @@ from .base import *
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'django-booking.onrender.com']
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    'django-booking.onrender.com'
+]
 
 DATABASES = {
     'default': {
@@ -14,3 +18,6 @@ DATABASES = {
         'PORT': os.environ.get('POSTGRES_DB_PORT'),
     }
 }
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
