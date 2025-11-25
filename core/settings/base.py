@@ -1,6 +1,7 @@
 import os, environ
 from pathlib import Path
 
+
 env = environ.Env(
     # set casting, default value
     DEBUG=(bool, True)
@@ -22,7 +23,7 @@ ASSETS_ROOT = os.getenv('ASSETS_ROOT', '/static/assets')
 # load production server from .env
 ALLOWED_HOSTS        = ['localhost', 'localhost:85', '127.0.0.1',               env('SERVER', default='127.0.0.1') ]
 CSRF_TRUSTED_ORIGINS = ['http://localhost:85', 'http://127.0.0.1', 'https://' + env('SERVER', default='127.0.0.1') ]
-DEBUG = False
+DEBUG = True
 
 # Application definition
 
@@ -117,13 +118,15 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
+
 STATIC_URL = '/static/'
 
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [
-    BASE_DIR / "apps" / "static"
+    BASE_DIR / "static"
 ]
+
 
 
 #############################################################
@@ -149,4 +152,4 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
