@@ -23,7 +23,7 @@ ASSETS_ROOT = os.getenv('ASSETS_ROOT', '/static/assets')
 # load production server from .env
 ALLOWED_HOSTS        = ['localhost', 'localhost:85', '127.0.0.1',               env('SERVER', default='127.0.0.1') ]
 CSRF_TRUSTED_ORIGINS = ['http://localhost:85', 'http://127.0.0.1', 'https://' + env('SERVER', default='127.0.0.1') ]
-DEBUG = True
+DEBUG = False
 
 # Application definition
 
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'django_extensions',
     'debug_toolbar',
+    'whitenoise.runserver_nostatic',
 ]
 
 MIDDLEWARE = [
@@ -120,11 +121,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',
-]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 
 #############################################################
 #############################################################
