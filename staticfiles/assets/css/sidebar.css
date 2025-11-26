@@ -1,0 +1,50 @@
+.sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    background: transparent !important;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li a {
+    color: white;
+    font-size: 18px;
+    display: block;
+    padding: 10px 20px;
+}
+
+.sidebar ul li a:hover {
+    text-decoration: underline;
+}
+
+.cards-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 300px;
+    margin-top: 500px;
+    padding: 100px;
+}
+
+.card {
+    background: rgba(43, 36, 36, 0.2);
+    padding: 20px 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-align: initial;
+}
+
+.card:hover {
+    transform: scale(1.5);
+    box-shadow: 0 6px 18px rgb(0, 255, 187);
+}
