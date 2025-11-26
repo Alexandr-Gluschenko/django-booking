@@ -2,6 +2,7 @@ import os, environ
 from pathlib import Path
 from dotenv import load_dotenv
 
+
 env = environ.Env(
     # set casting, default value
     DEBUG=(bool, True)
@@ -24,6 +25,7 @@ ASSETS_ROOT = os.getenv('ASSETS_ROOT', '/static/assets')
 # load production server from .env
 ALLOWED_HOSTS        = ['localhost', 'localhost:85', '127.0.0.1',               env('SERVER', default='127.0.0.1') ]
 CSRF_TRUSTED_ORIGINS = ['http://localhost:85', 'http://127.0.0.1', 'https://' + env('SERVER', default='127.0.0.1') ]
+DEBUG = False
 
 # Application definition
 
@@ -40,6 +42,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'django_extensions',
     'debug_toolbar',
+    'whitenoise.runserver_nostatic',
 ]
 
 MIDDLEWARE = [
@@ -118,13 +121,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
-STATIC_ROOT = os.path.join(CORE_DIR, 'staticfiles')
+
 STATIC_URL = '/static/'
 
-# Extra places for collectstatic to find static files.
-STATICFILES_DIRS = (
-    os.path.join(CORE_DIR, 'apps/static'),
-)
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
 #############################################################
@@ -151,3 +151,4 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = BASE_DIR / 'media'
+
