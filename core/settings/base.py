@@ -1,5 +1,6 @@
 import os, environ
 from pathlib import Path
+from dotenv import load_dotenv
 
 env = environ.Env(
     # set casting, default value
@@ -8,6 +9,7 @@ env = environ.Env(
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
+load_dotenv(BASE_DIR / '.env')
 CORE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Take environment variables from .env file
