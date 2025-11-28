@@ -26,3 +26,6 @@ The user can select a country and book a room of one of the categories: Deluxe, 
 ```bash
 git clone https://github.com/username/django-booking.git
 cd django-booking
+
+### 🌐 Deployed Application
+https://django-booking.onrender.com/login/
