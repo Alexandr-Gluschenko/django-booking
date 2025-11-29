@@ -29,3 +29,7 @@ cd django-booking
 
 ### 🌐 Deployed Application
 https://django-booking.onrender.com/login/
+
+### Tested user
+Username: testuser
+Password: Test12345!
