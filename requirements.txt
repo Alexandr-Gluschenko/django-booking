@@ -1,0 +1,13 @@
+asgiref==3.10.0
+crispy-bootstrap5==2025.6
+Django==5.2.8
+django-crispy-forms==2.5
+django-debug-toolbar==6.1.0
+django-environ==0.12.0
+django-extensions==4.1
+gunicorn==23.0.0
+psycopg2-binary==2.9.11
+pillow==12.0.0
+python-dotenv==1.2.1
+sqlparse==0.5.3
+whitenoise==6.11.0
